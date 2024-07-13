@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Container, Grid, Typography, TextField, Button, Paper, Box } from "@mui/material";
+import { Container, Grid, Typography, TextField, Button, Paper, Box, Modal } from "@mui/material";
+import axios from "axios";
 
 
 export default function WeatherApp(){
@@ -19,7 +20,13 @@ export default function WeatherApp(){
 
     });
 
+    // 天気のアイコンのurlを保持
     const imgUrl = `https:${resultData.img}`;
+
+    // エラーメッセージを保持
+    const [error, setError] = useState(null);
+    // モーダルの表示/非表示を管理
+    const [open, setOpen] = useState(false);
 
     // 入力の受け取り
     const handleChange = (event) => {
@@ -38,17 +45,29 @@ export default function WeatherApp(){
 
     // weather api の呼び出し
     const getWeather = () => {
-        fetch(`https://api.weatherapi.com/v1/current.json?key=947ac7d387164bf9bff95033241307&q=${formData.city}&aqi=no`)
-        .then(Response => Response.json())
-        .then(jsonData => setResultData({
-            ...resultData,
-            country: jsonData.location.country,
-            city: jsonData.location.name,
-            temperature: jsonData.current.temp_c,
-            weather: jsonData.current.condition.text,
-            img: jsonData.current.condition.icon,
-        }));
-    }
+        axios.get(`https://api.weatherapi.com/v1/current.json?key=947ac7d387164bf9bff95033241307&q=${formData.city}&aqi=no`)
+        .then((response) => {
+            const jsonData = response.data;
+            setResultData({
+                ...resultData,
+                country: jsonData.location.country,
+                city: jsonData.location.name,
+                temperature: jsonData.current.temp_c,
+                weather: jsonData.current.condition.text,
+                img: jsonData.current.condition.icon,
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching weather data:", error);
+            setError(error.message);
+            setOpen(true);
+        });
+    };
+
+    // エラーモーダルを閉じる
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <Container maxWidth="sm" sx={{ mt: 4 }}>
@@ -97,6 +116,35 @@ export default function WeatherApp(){
                     </Box>
                 </Paper>
             </Box>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="error-modal-title"
+                aria-describedby="error-modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <Typography id="error-modal-title" variant="h6" component="h2">
+                        Error
+                    </Typography>
+                    <Typography id="error-modal-description" sx={{ mt: 2 }}>
+                        {error}
+                    </Typography>
+                    <Button onClick={handleClose} sx={{ mt: 2 }} variant="contained" color="primary">
+                        Close
+                    </Button>
+                </Box>
+            </Modal>
         </Container>
     );
 }
