@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useState } from "react";
+import { Container, Grid, Typography, TextField, Button, Paper, Box } from "@mui/material";
+
 
 export default function WeatherApp(){
     // 入力された値の保持
@@ -8,8 +10,8 @@ export default function WeatherApp(){
 
     // APIで返却された値を保持
     const [resultData, setResultData] = useState({
-        country: 'U.S.A',
-        city: 'Tokyo',
+        country: '国名',
+        city: '都市名',
         temperature: '',
         weather: '',
         img: '',
@@ -48,24 +50,53 @@ export default function WeatherApp(){
         }));
     }
 
-    return(
-        <>
-            <div>
-                <h1>JS World Weather</h1>
-                <form onSubmit={handleSubmit}>
-                    <input type="text" name="city" value={formData.city} placeholder="都市名を英語で入力" onChange={handleChange}/>
-                    <button type="submit">Get Weather</button>
-                </form>
-            </div>
-            <div>
-                <div>{resultData.country}</div>
-                <div>{resultData.city}</div>
-                <div>{resultData.temperature}<span>℃</span></div>
-                <div>
-                    <img src={imgUrl} alt="icon" />
-                    <span>{resultData.weather}</span>
-                </div>
-            </div>
-        </>
-    )
+    return (
+        <Container maxWidth="sm" sx={{ mt: 4 }}>
+            <Box
+                sx={{
+                    backgroundImage: `url('/sunny.jpg')`, // ここに背景画像のURLを設定
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    p: 2,
+                }}
+            >
+                <Paper elevation={3} sx={{ p: 2, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+                    <Typography variant="h4" align="center" gutterBottom>
+                        JS World Weather
+                    </Typography>
+                    <form onSubmit={handleSubmit} sx={{ mb: 2 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={8}>
+                                <TextField
+                                    fullWidth
+                                    type="text"
+                                    name="city"
+                                    value={formData.city}
+                                    onChange={handleChange}
+                                    placeholder="Enter city name in English"
+                                    variant="outlined"
+                                    />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Button type="submit" variant="contained" color="primary" fullWidth>
+                                    Get Weather
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                    <Box textAlign="center">
+                        <Typography variant="h6">{resultData.country}</Typography>
+                        <Typography variant="h5">{resultData.city}</Typography>
+                        <Typography variant="h3" sx={{ mt: 1, mb: 1 }}>
+                            {resultData.temperature}<span>℃</span>
+                        </Typography>
+                        <Box display="flex" alignItems="center" justifyContent="center">
+                            <img src={imgUrl} alt="Weather Icon" style={{ marginRight: 10 }} />
+                            <Typography variant="h6">{resultData.weather}</Typography>
+                        </Box>
+                    </Box>
+                </Paper>
+            </Box>
+        </Container>
+    );
 }
