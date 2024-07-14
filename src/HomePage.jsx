@@ -5,7 +5,7 @@ import './HomePage.css';
 
 const pages = [
   { title: 'About Page', path: '/about' },
-  { title: 'Search Weather Page', path: '/searchWeather' },
+  { title: 'Search Weather', path: '/searchWeather' },
   // 他のページを追加
 ];
 
