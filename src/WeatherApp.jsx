@@ -81,7 +81,7 @@ export default function WeatherApp(){
             >
                 <Paper elevation={3} sx={{ p: 2, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
                     <Typography variant="h4" align="center" gutterBottom>
-                        JS World Weather
+                        Search for Current Weather
                     </Typography>
                     <form onSubmit={handleSubmit} sx={{ mb: 2 }}>
                         <Grid container spacing={2} alignItems="center">
