@@ -16,8 +16,6 @@ export default function WeatherApp(){
         temperature: '',
         weather: '',
         img: '',
-
-
     });
 
     // 天気のアイコンのurlを保持

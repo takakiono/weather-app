@@ -6,8 +6,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
+  //const menuList = ['Search for Current Weather', 'About', 'Contact'];
+  const menuList = [{
+    name: 'Search for Current Weather',
+    link: '/searchWeather'
+  },{
+    name: 'About',
+    link: '/about'
+  }]
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
@@ -24,9 +34,9 @@ const Sidebar = () => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {['Home', 'About', 'Contact'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
+        {menuList.map((menu, index) => (
+          <ListItem button key={menu.name} component={Link} to={menu.link}>
+            <ListItemText primary={menu.name} />
           </ListItem>
         ))}
       </List>
